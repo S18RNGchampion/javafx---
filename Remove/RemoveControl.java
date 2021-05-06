@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import sample.Book;
+import sample.Main.Control;
 import sample.Main.MainGraph;
 import sample.Welcome.Controller;
 
@@ -20,6 +21,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -120,8 +125,6 @@ public class RemoveControl implements Initializable {
                 }
             }
         }
-
-
     }
     public   void  Clear(){
         text.setText(null);
@@ -129,24 +132,22 @@ public class RemoveControl implements Initializable {
         test=false;
     }
     public static void updateTxtCollection() throws IOException {
-
-
-        Iterator<Book> iterator = Controller.list.iterator();
+        Iterator<Book> iterator=Controller.list.iterator();
         while(iterator.hasNext()){
-            Book temp=iterator.next();
+            Book temp =iterator.next();
             if(temp.getBookNumber().equals(number)){
-                Controller.list.remove(temp);
+                iterator.remove();
                 break;
             }
         }
-        Iterator<Book> temp=Controller.list.listIterator();
-        Writer writer = new FileWriter("./src/main/java/sample/图书信息.txt");
-        for (; temp.hasNext(); ) {
-            Book msginput = temp.next();
-            writer.write(msginput.getBookNumber() + "\t" + msginput.getBookName() + "\t" + msginput.getBookWriter() + "\t" + msginput.getBookPrice() + "\n");
+        try (Connection conn = DriverManager.getConnection(Controller.url, Controller.user, Controller.password)) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM library WHERE number=?")) {
+                ps.setObject(1, number);
+                ps.executeUpdate(); // 删除的行数
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        writer.close();
+
     }
-
-
 }

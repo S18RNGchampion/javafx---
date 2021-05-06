@@ -1,0 +1,10 @@
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0001', '三国志', '许世平', '90\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0002', '红楼梦', '王家康', '560\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0003', '京瓶梅', '许肖阳', '78\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0004', '梦溪笔谈', '王昕宇', '63\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0005', '西游记', '王俊凯', '90\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0006', '三国杀', '桌游', '65\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0007', '西游杀', '腾讯', '98\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0008', '英雄联盟', '拳头', '2200\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0009', '王者荣耀', '甜美', '90\r');
+INSERT INTO `library` (`number`, `name`, `writer`, `price`) VALUES ('0010', '造梦西游', '4399', '78');

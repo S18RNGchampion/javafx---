@@ -15,6 +15,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Iterator;
 
 
@@ -56,7 +60,6 @@ public class AddControl {
 
     public void getBookNumber() {
         Iterator<Book> iterator = Controller.list.iterator();
-//        Iterator<library> iterator = Controller.list.iterator();
         if (bookNumber.getText().matches(regex1)) {
             while (iterator.hasNext()) {
                 if (bookNumber.getText().equals(iterator.next().getBookNumber())) {
@@ -143,7 +146,7 @@ public class AddControl {
         }
     }
 
-    public void setConfirm(ActionEvent event) throws IOException {
+    public void setConfirm(ActionEvent event) throws SQLException, IOException {
 
         if(arrays[0]==2&&arrays[1]==2&&arrays[2]==2&&arrays[3]==2){
             sample.Add.SuccessGraph successGraph=new SuccessGraph();
@@ -168,19 +171,21 @@ public class AddControl {
         }
 
     }
-    public static void updateTxtCollection() throws IOException {
+    public static void updateTxtCollection() throws  SQLException {
         Controller.list.add(new Book(info[0],info[1],info[2],info[3]));
-//        Controller.list.add(new library(info[0],info[1],info[2],info[3]));
-        Iterator<Book> iterator = Controller.list.iterator();
-//        Iterator<library> iterator = Controller.list.iterator();
-        Writer writer = new FileWriter("./src/main/java/sample/图书信息.txt");
-        for (; iterator.hasNext(); ) {
-            Book msginput = iterator.next();
-//            library msginput = iterator.next();
-            writer.write(msginput.getBookNumber() + "\t" + msginput.getBookName() + "\t" + msginput.getBookWriter() + "\t" + msginput.getBookPrice() + "\n");
-//            writer.write(msginput.getNumber() + "\t" + msginput.getBookName() + "\t" + msginput.getBookName() + "\t" + msginput.getPrice() + "\n");
+        try (Connection conn = DriverManager.getConnection(Controller.url,Controller.user,Controller.password)) {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO library (number,name,writer,price) VALUES (?,?,?,?)")) {
+                ps.setObject(1, info[0]);
+                ps.setObject(2, info[1]);
+                ps.setObject(3, info[2]);
+                ps.setObject(4, info[3]);
+                ps.executeUpdate();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
-        writer.close();
+
     }
 
 }

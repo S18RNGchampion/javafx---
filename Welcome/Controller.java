@@ -11,15 +11,17 @@ import sample.Main.MainGraph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class Controller implements Initializable {
+    public static String url="jdbc:mysql://localhost/test?useSSL=false";
+    public static String user="root";
+    public static String password="password";
     public static List<Book> list = new ArrayList<>();
-//    public static List<library> list = new ArrayList<>();
-    public static final File file = new File("./src/main/java/sample/图书信息.txt");
     @FXML
     private Button in;
     public void setIn(ActionEvent event) throws Exception {
@@ -29,22 +31,24 @@ public class Controller implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        assert scanner != null;
-        scanner.useDelimiter("\n");
-        for (; scanner.hasNext(); ) {
-            String[] msg = scanner.next().split("\t");
+
+       try(Connection connection= DriverManager.getConnection(url,user,password)){
+           try(PreparedStatement statement=connection.prepareStatement("SELECT * from library")){
+            try(ResultSet resultSet=statement.executeQuery()){
+                while (resultSet.next()){
+                    String a1=resultSet.getString(1);
+                    String a2=resultSet.getString(2);
+                    String a3=resultSet.getString(3);
+                    String a4=resultSet.getString(4);
+                    list.add(new Book(a1,a2,a3,a4));
+                }
+            }
+           }
 
 
-//            list.add(book);
-            list.add(new Book(msg[0],msg[1],msg[2],msg[3]));
-
-        }
+        } catch (SQLException throwables) {
+           throwables.printStackTrace();
+       }
 
     }
 }
