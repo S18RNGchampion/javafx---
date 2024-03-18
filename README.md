@@ -1,5 +1,4 @@
 # javafx-library
-初学者用时5日作品，喜欢的点小星星！
 初始界面
 ![image](https://user-images.githubusercontent.com/66316294/115717096-6dfe0b00-a3ac-11eb-8951-f21638914fc3.png)
 主功能
